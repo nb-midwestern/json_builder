@@ -1,0 +1,5 @@
+[application]
+out_dir = "docs"
+
+[web.app]
+base_path = "https://github.com/nb-midwestern/json_builder"
