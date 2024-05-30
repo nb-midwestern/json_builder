@@ -7,7 +7,8 @@ build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dioxus = { version = "0.2.4", features = ["web"] }
+dioxus = { version = "0.3.0" }
+dioxus-web = { version = "0.3.0" }
 manganis = "0.2.2"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

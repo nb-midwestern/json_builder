@@ -21,7 +21,7 @@ enum Property {
 fn main() {
     const _TAILWIND_URL: &str = manganis::mg!(file("public/tailwind.css"));
 
-    dioxus::web::launch(app);
+    dioxus_web::launch(app);
 }
 
 fn app(cx: Scope) -> Element {
@@ -54,14 +54,20 @@ fn app(cx: Scope) -> Element {
 
     let add_object = |side: &UseState<Vec<Property>>| {
         let mut values = side.get().clone();
-        values.push(Property::Object { name: "var".to_string(), value: "".to_string() });
+        values.push(Property::Object {
+            name: "var".to_string(),
+            value: "".to_string(),
+        });
         side.set(values);
     };
 
     let add_date_object = |side: &UseState<Vec<Property>>| {
         let mut values = side.get().clone();
-        values.push(Property::Object { name: "Date.parse".to_string(), value: "Date.now".to_string() });
-        side.set(values); 
+        values.push(Property::Object {
+            name: "Date.parse".to_string(),
+            value: "Date.now".to_string(),
+        });
+        side.set(values);
     };
 
     let reset_page = |_| {
@@ -79,7 +85,7 @@ fn app(cx: Scope) -> Element {
                     class: "flex flex-col space-y-2",
                     h3 { class: "text-lg", "Left Hand Side" }
                     { 
-                        lefthandside.get().iter().map(|property| render_property(cx, property, lefthandside)).collect::<Vec<_>>()
+                        lefthandside.get().into_iter().map(|property| render_property(cx, property, lefthandside))
                     }
                     {
                         if lefthandside.get().is_empty() {
@@ -127,7 +133,10 @@ fn app(cx: Scope) -> Element {
                     class: "flex flex-col space-y-2",
                     h3 { class: "text-lg", "Right Hand Side" }
                     { 
-                        righthandside.get().iter().map(|property| render_property(cx, property, righthandside)).collect::<Vec<_>>()
+                        righthandside.get()
+                        .iter()
+                        .map(|property| render_property(cx, property, righthandside))
+
                     }
                     {
                         if righthandside.get().is_empty() {
@@ -177,7 +186,11 @@ fn app(cx: Scope) -> Element {
     ))
 }
 
-fn render_property<'a>(cx: Scope<'a>, property: &'a Property, side: &'a UseState<Vec<Property>>) -> VNode<'a> {
+fn render_property<'a>(
+    cx: Scope<'a>,
+    property: &'a Property,
+    side: &'a UseState<Vec<Property>>,
+) -> VNode<'a> {
     match property {
         Property::Value(val) => cx.render(rsx!(
             div {
@@ -242,10 +255,11 @@ fn render_property<'a>(cx: Scope<'a>, property: &'a Property, side: &'a UseState
 }
 
 fn format_properties(properties: Vec<Property>) -> Vec<serde_json::Value> {
-    properties.into_iter().map(|property| {
-        match property {
+    properties
+        .into_iter()
+        .map(|property| match property {
             Property::Value(val) => serde_json::Value::String(val),
             Property::Object { name, value } => json!({ name: value }),
-        }
-    }).collect()
+        })
+        .collect()
 }
