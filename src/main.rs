@@ -87,17 +87,17 @@ fn app(cx: Scope) -> Element {
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
                                     onclick: move |_| add_value(lefthandside),
-                                    "Add Value"
+                                    " Value"
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
                                     onclick: move |_| add_object(lefthandside),
-                                    "Add Variable"
+                                    " Variable"
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
                                     onclick: move |_| add_date_object(lefthandside),
-                                    "Add Date"
+                                    " Date"
                                 }
                             )
                         } else {
@@ -135,17 +135,17 @@ fn app(cx: Scope) -> Element {
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
                                     onclick: move |_| add_value(righthandside),
-                                    "Add Value"
+                                    " Value"
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
                                     onclick: move |_| add_object(righthandside),
-                                    "Add Variable"
+                                    " Variable"
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
                                     onclick: move |_| add_date_object(righthandside),
-                                    "Add Date"
+                                    " Date"
                                 }
                             )
                         } else {
