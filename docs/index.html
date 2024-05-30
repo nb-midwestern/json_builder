@@ -7,15 +7,12 @@
 
     <link
       rel="preload"
-      href="/json_builder/json_builder-ea4bc5f65773ebae_bg.wasm"
+      href="/json_builder-ea4bc5f65773ebae_bg.wasm"
       as="fetch"
       type="application/wasm"
       crossorigin=""
     />
-    <link
-      rel="modulepreload"
-      href="/json_builder/json_builder-ea4bc5f65773ebae.js"
-    />
+    <link rel="modulepreload" href="/json_builder-ea4bc5f65773ebae.js" />
   </head>
   <body class="bg-gray-100 text-gray-800">
     <div
@@ -28,8 +25,8 @@
     </script>
 
     <script type="module">
-      import init from "/json_builder/json_builder-ea4bc5f65773ebae.js";
-      init("/json_builder/json_builder-ea4bc5f65773ebae_bg.wasm");
+      import init from "/json_builder-ea4bc5f65773ebae.js";
+      init("//json_builder-ea4bc5f65773ebae_bg.wasm");
     </script>
   </body>
 </html>
