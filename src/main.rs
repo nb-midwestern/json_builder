@@ -18,6 +18,7 @@ enum Property {
 
 fn main() {
     const _TAILWIND_URL: &str = manganis::mg!(file("public/tailwind.css"));
+    launch(app);
 }
 
 fn app() -> Element {
@@ -43,11 +44,10 @@ fn app() -> Element {
         }
     };
 
-    let add_value = || {
-        let mut values = lefthandside.read().clone();
+    fn add_value(signal: &mut Signal<Vec<Property>>) {
+        let mut values = signal.read().clone();
         values.push(Property::Value("".to_string()));
-        lefthandside.set(values);
-        copy_state.set(1);
+        signal.set(values);
     };
 
     let add_object = |side: &mut Signal<Vec<Property>>| {
@@ -82,8 +82,7 @@ fn app() -> Element {
                     class: "flex flex-col space-y-2",
                     h3 { class: "text-lg", "Left Hand Side" }
                     {
-                        // lefthandside.read().iter().map(|property| render_property( property, lefthandside)).collect::<Vec<_>>()
-
+                        lefthandside.read().iter().map(|property| render_property( property, &lefthandside))
                     }
                     {
                         if lefthandside.read().is_empty() {
@@ -131,14 +130,14 @@ fn app() -> Element {
                     class: "flex flex-col space-y-2",
                     h3 { class: "text-lg", "Right Hand Side" }
                     {
-                        // righthandside.get().iter().map(|property| render_property(cx, property, righthandside)).collect::<Vec<_>>()
+                        righthandside.read().iter().map(|property| render_property( property, &righthandside))
                     }
                     {
                         if righthandside.read().is_empty() {
                             rsx!(
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
-                                    // onclick: move |_| add_value(righthandside),
+                                    onclick: move |_| add_value(&mut righthandside),
                                     "Value"
                                 }
                                 button {
@@ -181,7 +180,7 @@ fn app() -> Element {
     }
 }
 
-fn render_property(property: &Property, side: &mut Signal<Vec<Property>>) -> VNode {
+fn render_property(property: &Property, side: &Signal<Vec<Property>>) -> VNode {
     match property {
         Property::Value(_) => todo!(),
         Property::Object { name, value } => todo!(),
