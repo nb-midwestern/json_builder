@@ -50,7 +50,7 @@ fn app() -> Element {
         signal.set(values);
     };
 
-    let add_object = |side: &mut Signal<Vec<Property>>| {
+    fn add_object(side: &mut Signal<Vec<Property>>) {
         let mut values = side.read().clone();
         values.push(Property::Object {
             name: "var".to_string(),
@@ -59,7 +59,7 @@ fn app() -> Element {
         side.set(values);
     };
 
-    let add_date_object = |side: &mut Signal<Vec<Property>>| {
+    fn add_date_object(side: &mut Signal<Vec<Property>>) {
         let mut values = side.read().clone();
         values.push(Property::Object {
             name: "Date.parse".to_string(),
@@ -82,24 +82,24 @@ fn app() -> Element {
                     class: "flex flex-col space-y-2",
                     h3 { class: "text-lg", "Left Hand Side" }
                     {
-                        lefthandside.read().iter().map(|property| render_property( property, &lefthandside))
+                        // lefthandside.read().iter().map(|property| render_property( property, &lefthandside))
                     }
                     {
                         if lefthandside.read().is_empty() {
                             rsx!{
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
-                                    // onclick: move |_| add_value(lefthandside),
+                                    onclick: move |_| add_value(&mut lefthandside),
                                     "Value"
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
-                                    // onclick: move |_| add_object(lefthandside),
+                                    onclick: move |_| add_object(&mut lefthandside),
                                     "Variable"
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
-                                    // onclick: move |_| add_date_object(lefthandside),
+                                    onclick: move |_| add_date_object(&mut lefthandside),
                                     "Date"
                                 }
                         }
@@ -130,7 +130,7 @@ fn app() -> Element {
                     class: "flex flex-col space-y-2",
                     h3 { class: "text-lg", "Right Hand Side" }
                     {
-                        righthandside.read().iter().map(|property| render_property( property, &righthandside))
+                         righthandside.read().iter().map(|property| render_property( property, &mut righthandside))
                     }
                     {
                         if righthandside.read().is_empty() {
@@ -142,12 +142,12 @@ fn app() -> Element {
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
-                                    // onclick: move |_| add_object(righthandside),
+                                    onclick: move |_| add_object(&mut righthandside),
                                     "Variable"
                                 }
                                 button {
                                     class: "px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600",
-                                    // onclick: move |_| add_date_object(righthandside),
+                                    onclick: move |_| add_date_object(&mut righthandside),
                                     "Date"
                                 }
                             )
@@ -182,8 +182,6 @@ fn app() -> Element {
 
 fn render_property(property: &Property, side: &Signal<Vec<Property>>) -> VNode {
     match property {
-        Property::Value(_) => todo!(),
-        Property::Object { name, value } => todo!(),
         Property::Value(val) => rsx! {
             div {
                 class: "flex flex-col",
@@ -192,13 +190,13 @@ fn render_property(property: &Property, side: &Signal<Vec<Property>>) -> VNode {
                     class: "p-2 border rounded",
                     r#type: "text",
                     value: "{val}",
-                    // oninput: move |e| {
-                    //     let mut values = side.read().clone();
-                    //     if let Some(index) = values.iter().position(|p| p == property) {
-                    //         values[index] = Property::Value(e.value().clone());
-                    //         side.set(values);
-                    //     }
-                    // },
+                    oninput: move |e| {
+                        let mut values = side.read().clone();
+                        if let Some(index) = values.iter().position(|p| p == property) {
+                            values[index] = Property::Value(e.value().clone());
+                            side.set(values);
+                        }
+                    },
                 }
             }
         }
